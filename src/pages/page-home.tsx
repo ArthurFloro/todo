@@ -1,5 +1,5 @@
 import Container from "../components/container";
-import TaskItem from "../core-components/task-item";
+import TasksList from "../core-components/tasks-lists";
 import TasksSummary from "../core-components/tasks-summary";
 
 export default function PageHome() {
@@ -8,6 +8,7 @@ export default function PageHome() {
       <TasksSummary />
     </header>
 
-    <TaskItem />
+
+    <TasksList />
   </Container>
 }

@@ -10,6 +10,7 @@ import React, { useState } from "react";
 import InputText from "../components/input-text";
 import { TaskState, type Task } from "../models/task";
 import { cx } from "class-variance-authority";
+import useTask from "../hooks/use-task";
 
 interface TaskItemProps {
   task: Task
@@ -17,7 +18,8 @@ interface TaskItemProps {
 
 export default function TaskItem({ task }: TaskItemProps) {
   const [isEditing, setIsEditing] = useState(task?.state === TaskState.Creating)
-  const [taskTitle, setTaskTitle] = useState("")
+  const [taskTitle, setTaskTitle] = useState(task.title || "")
+  const { updateTask } = useTask()
 
   function handleEditTask() {
     setIsEditing(true)
@@ -33,8 +35,8 @@ export default function TaskItem({ task }: TaskItemProps) {
 
   function handleSaveTask(e: React.SubmitEvent<HTMLFormElement>) {
     e.preventDefault()
-    console.log({ id: task.id, title: taskTitle })
-    // chamada para função  de atualizar
+
+    updateTask(task.id, { title: taskTitle })
     setIsEditing(false)
   }
 
@@ -55,7 +57,12 @@ export default function TaskItem({ task }: TaskItemProps) {
           </div>
         ) : (
           <form onSubmit={handleSaveTask} className="flex items-center gap-4">
-            <InputText className="flex-1" onChange={handleChangetaskTitle} required autoFocus />
+            <InputText
+              value={taskTitle}
+              className="flex-1"
+              onChange={handleChangetaskTitle}
+              required
+              autoFocus />
             <div className="flex gap-1">
               <ButtonIcon type="button" icon={XIcon} variant={"secondary"} onClick={handleExitEditTask} />
               <ButtonIcon type="submit" icon={CheckIcon} variant={"primary"} />
